@@ -122,11 +122,11 @@ while True:
     screen.fill(bg_color)
 
     # Body movement mechanism
-    for i in range(len(whole_body)):
-        if i == 0:
-            whole_body[i].move()
-            whole_body[i].draw()
-        else:
+    whole_body[0].move()
+    whole_body[0].draw()
+
+    if len(whole_body) > 1:
+        for i in range(1, len(whole_body)):
             whole_body[i].prev_y = whole_body[i].rect.y
             whole_body[i].prev_x = whole_body[i].rect.x
             whole_body[i].rect.x = whole_body[i-1].prev_x
@@ -136,8 +136,7 @@ while True:
     food.make_food()
 
     if food.active == False:
-        whole_body.append(Body(whole_body[0].vel, whole_body[0].prev_x, whole_body[0].prev_y))
-        print(whole_body[0].prev_y, whole_body[0].prev_x)
+        whole_body.append(Body(whole_body[-1].vel, whole_body[-1].prev_x, whole_body[-1].prev_y))
 
     food.draw_food()
     pygame.display.flip()
