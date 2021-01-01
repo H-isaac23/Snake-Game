@@ -75,13 +75,15 @@ class Body(Snake):
 class Food:
     def __init__(self):
         self.radius = 20
-        self.rect = pygame.rect.Rect(random.randint(100, 1180), random.randint(100, 650), self.radius, self.radius)
         self.active = True
+        self.x_pos = range(40, screen_width-40, 20)
+        self.y_pos = range(40, screen_height-40, 20)
+        self.rect = pygame.rect.Rect(self.x_pos[random.randint(0, 32)], self.y_pos[random.randint(0, 32)], self.radius, self.radius)
 
     def make_food(self):
         if self.active == False:
-            self.rect.x = random.randint(100, 1180)
-            self.rect.y = random.randint(100, 650)
+            self.rect.x = self.x_pos[random.randint(0, 32)]
+            self.rect.y = self.y_pos[random.randint(0, 32)]
 
     def draw_food(self):
         self.active = True
@@ -93,7 +95,7 @@ class GameManager:
         for i in range(len(whole_body)-1):
             whole_body.pop()
 
-        snake.rect.center = (200, 200)
+        snake.rect.center = (90, 90)
         snake.vel_x = snake.vel
         snake.vel_y = 0
 
