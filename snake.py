@@ -52,6 +52,11 @@ class Body(Snake):
         if self.rect.colliderect(food.rect):
             food.active = False
             self.score += 1
+        if len(whole_body) > 1:
+            for i in range(1, len(whole_body)-1):
+                if whole_body[0].rect == whole_body[i].rect:
+                    game.game_restart()
+                    break
 
     def constraint(self):
         if self.rect.x + self.vel_x <= 20:
@@ -92,6 +97,23 @@ class GameManager:
         snake.vel_x = snake.vel
         snake.vel_y = 0
 
+def body_mechanism():
+    # Body movement mechanism
+    whole_body[0].move()
+    whole_body[0].draw()
+
+    if len(whole_body) > 1:
+        for i in range(1, len(whole_body)):
+            whole_body[i].prev_y = whole_body[i].rect.y
+            whole_body[i].prev_x = whole_body[i].rect.x
+            whole_body[i].rect.x = whole_body[i - 1].prev_x
+            whole_body[i].rect.y = whole_body[i - 1].prev_y
+            whole_body[i].draw()
+
+    food.make_food()
+
+    if food.active == False:
+        whole_body.append(Body(whole_body[-1].vel, whole_body[-1].prev_x, whole_body[-1].prev_y))
 
 
 # Setting up the main window
@@ -121,23 +143,7 @@ while True:
 
     screen.fill(bg_color)
 
-    # Body movement mechanism
-    whole_body[0].move()
-    whole_body[0].draw()
-
-    if len(whole_body) > 1:
-        for i in range(1, len(whole_body)):
-            whole_body[i].prev_y = whole_body[i].rect.y
-            whole_body[i].prev_x = whole_body[i].rect.x
-            whole_body[i].rect.x = whole_body[i-1].prev_x
-            whole_body[i].rect.y = whole_body[i-1].prev_y
-            whole_body[i].draw()
-
-    food.make_food()
-
-    if food.active == False:
-        whole_body.append(Body(whole_body[-1].vel, whole_body[-1].prev_x, whole_body[-1].prev_y))
-
+    body_mechanism()
     food.draw_food()
     pygame.display.flip()
     clock.tick(15)
